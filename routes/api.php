@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Models\Sale;
 use App\Models\TableStatus;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Esp32Controller;
 
 // Route::post('/sales', function (Request $request) {
 //     $validated = $request->validate([
@@ -37,3 +38,6 @@ Route::get('/ping_test', function () {
         "message" => "hello"
     ]);
 });
+
+Route::post('/sales', [Esp32Controller::class, 'recordSale']);
+Route::post('/ping', [Esp32Controller::class, 'ping']);
