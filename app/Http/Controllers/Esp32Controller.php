@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Sale;
+use App\Models\OverrideTime;
+use Illuminate\Http\Request;
 
 class Esp32Controller extends Controller
 {
@@ -37,5 +38,34 @@ class Esp32Controller extends Controller
             // optional override time, e.g., 60 seconds
             'override_time_sec' => 0
         ]);
+    }
+
+
+    public function check(Request $request)
+    {
+        $tableId = $request->query('table_id', 'TABLE-1'); // default
+        $override = OverrideTime::where('table_id', $tableId)->first();
+
+        if (!$override) {
+            return response()->json(null); // null → no override
+        }
+
+        return response()->json($override->override_time); // can be -1, >=0, or null
+    }
+
+    // optional: admin can set override
+    public function set(Request $request)
+    {
+        $request->validate([
+            'table_id' => 'required|string',
+            'override_time' => 'nullable|integer',
+        ]);
+
+        $override = OverrideTime::updateOrCreate(
+            ['table_id' => $request->table_id],
+            ['override_time' => $request->override_time]
+        );
+
+        return response()->json($override);
     }
 }

@@ -40,4 +40,6 @@ Route::get('/ping_test', function () {
 });
 
 Route::post('/sales', [Esp32Controller::class, 'recordSale']);
-Route::post('/ping', [Esp32Controller::class, 'ping']);
+
+Route::get('/override', [Esp32Controller::class, 'check']); // for ESP32 fetch
+Route::post('/override', [Esp32Controller::class, 'set']);   // optional: admin override
