@@ -39,4 +39,15 @@ class TableTimeController extends Controller
             'time_remaining' => $timeRemaining
         ]);
     }
+
+    public function show($table_id)
+    {
+        $table = Table::where('table_id', $table_id)->first();
+
+        if (!$table) {
+            return response()->json(['message' => 'Table not found'], 404);
+        }
+
+        return response()->json($table);
+    }
 }

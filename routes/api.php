@@ -46,3 +46,4 @@ Route::get('/override', [Esp32Controller::class, 'check']); // for ESP32 fetch
 Route::post('/override', [Esp32Controller::class, 'set']);   // optional: admin override
 
 Route::post('/time', [TableTimeController::class, 'update']);
+Route::get('/time/{table_id}', [TableTimeController::class, 'show']);
