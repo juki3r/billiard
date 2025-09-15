@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Esp32Controller;
 use App\Http\Controllers\TableTimeController;
+use Illuminate\Support\Facades\DB;
 
 // Route::post('/sales', function (Request $request) {
 //     $validated = $request->validate([
@@ -47,3 +48,17 @@ Route::post('/override', [Esp32Controller::class, 'set']);   // optional: admin 
 
 Route::post('/time', [TableTimeController::class, 'update']);
 Route::get('/time/{table_id}', [TableTimeController::class, 'show']);
+
+Route::get('/sales/total', function () {
+    $summary = DB::table('sales')
+        ->select('table_id', DB::raw('SUM(coins) as total_sales'))
+        ->groupBy('table_id')
+        ->get();
+
+    $grandTotal = $summary->sum('total_sales');
+
+    return response()->json([
+        'tables' => $summary,
+        'grand_total' => $grandTotal,
+    ]);
+});
