@@ -62,3 +62,8 @@ Route::get('/sales/total', function () {
         'grand_total' => $grandTotal,
     ]);
 });
+
+Route::post('/sales/reset', function () {
+    DB::table('sales')->truncate(); // or reset totals
+    return response()->json(['message' => 'Sales reset successfully']);
+});
